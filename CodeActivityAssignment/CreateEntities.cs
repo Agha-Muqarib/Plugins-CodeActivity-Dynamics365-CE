@@ -83,32 +83,42 @@ namespace CodeActivityAssignment
                 //  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX    Order Product   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
-                if (context.PrimaryEntityName == "plas_order")
+                if (context.PrimaryEntityName == "plas_orderproduct")
                 {
 
-                    tracingService.Trace("Entered Order");
+                    int remQty = (int)currentEntityRecord["plas_remainingquantity"];
 
-                    Entity newOpEntity = new Entity("plas_orderproduct");
+                    if (remQty > 0)
+                    {
 
-                    tracingService.Trace("newOrderEntity created");
+                        tracingService.Trace("Entered Order");
 
-                    // Setting fields of new order entity
+                        Entity newOpEntity = new Entity("plas_orderproduct");
 
-                    newOpEntity.Attributes["plas_name"] = currentEntityRecord["plas_name"];
-                    newOpEntity.Attributes["plas_order"] = currentEntityRecord["plas_order"];
-                    newOpEntity.Attributes["plas_product"] = currentEntityRecord["plas_product"];
-                    newOpEntity.Attributes["plas_orderedquantity"] = currentEntityRecord["plas_orderedquantity"];
-                    newOpEntity.Attributes["plas_deliveredquantity"] = currentEntityRecord["plas_deliveredquantity"];
-                    newOpEntity.Attributes["plas_remainingquantity"] = currentEntityRecord["plas_remainingquantity"];
-                    newOpEntity.Attributes["plas_status"] = currentEntityRecord["plas_status"];
+                        tracingService.Trace("newOrderEntity created");
+
+                        // Setting fields of new order entity
+
+                        newOpEntity.Attributes["plas_name"] = currentEntityRecord["plas_name"];
+                        newOpEntity.Attributes["plas_order"] = currentEntityRecord["plas_order"];
+                        newOpEntity.Attributes["plas_product"] = currentEntityRecord["plas_product"];
+                        newOpEntity.Attributes["plas_orderedquantity"] = currentEntityRecord["plas_orderedquantity"];
+                        newOpEntity.Attributes["plas_deliveredquantity"] = currentEntityRecord["plas_deliveredquantity"];
+                        newOpEntity.Attributes["plas_remainingquantity"] = currentEntityRecord["plas_remainingquantity"];
+                        newOpEntity.Attributes["plas_status"] = currentEntityRecord["plas_status"];
 
 
-                    tracingService.Trace("current order product entity data set to new order product entity ");
+                        tracingService.Trace("current order product entity data set to new order product entity ");
 
-                    // create new order entity
+                        // create new order entity
 
-                    service.Create(newOpEntity);
-                    tracingService.Trace("new order entity created ");
+                        service.Create(newOpEntity);
+                        tracingService.Trace("new order entity created ");
+                    }
+                    else
+                    {
+                        throw new InvalidPluginExecutionException("Remaining Quantity is less than 0");
+                    }
                 }
             }
             
